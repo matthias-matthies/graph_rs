@@ -60,6 +60,7 @@ impl<T: std::fmt::Debug> Graph<T> {
     pub fn neighbors(&self, x: VertexIndex) -> Vec<VertexIndex> {
         (x * self.vertex_count..x * self.vertex_count + self.vertex_count)
             .filter(|&i| self.adjacency_matrix[i] > 0)
+            .map(|i| i % self.vertex_count)
             .collect()
     }
     pub fn add_vertex(&mut self, v: T) -> VertexIndex {
