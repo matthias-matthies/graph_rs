@@ -1,5 +1,4 @@
 use std::fmt;
-use crate::GraphError::MatrixDimensionMismatch;
 
 pub type VertexIndex = usize;
 pub type EdgeCost = usize;
@@ -27,24 +26,16 @@ impl std::error::Error for GraphError {}
     vertices: Vec<T>,
     vertex_count: usize
 }*/
-/*#[derive(Debug)]
+#[derive(Debug)]
 pub struct Graph<T> {
     adjacency_matrix: Vec<usize>,
     vertices: Vec<T>,
     vertex_count: usize
-}*/
-#[derive(Debug)]
-pub struct Graph {
-    adjacency_matrix: Vec<usize>,
-    vertices: Vec<u64>,
-    vertex_count: usize
 }
 
 // impl<T, C> Graph<T, C> where C: PartialOrd + Copy {
-//impl<T> Graph<T> {
-impl Graph {
-    //pub fn new(adjacency_matrix: Vec<usize>, vertices: Vec<T>) -> Result<Graph<T>, GraphError> {
-    pub fn new(adjacency_matrix: Vec<usize>, vertices: Vec<u64>) -> Result<Graph, GraphError> {
+impl<T: std::fmt::Debug> Graph<T> {
+    pub fn new(adjacency_matrix: Vec<usize>, vertices: Vec<T>) -> Result<Graph<T>, GraphError> {
         let vertex_count = vertices.len();
         let expected_len = vertex_count * vertex_count;
 
@@ -71,8 +62,7 @@ impl Graph {
             .filter(|&i| self.adjacency_matrix[i] > 0)
             .collect()
     }
-    //pub fn add_vertex(&mut self, v: T) -> VertexIndex {
-    pub fn add_vertex(&mut self, v: u64) -> VertexIndex {
+    pub fn add_vertex(&mut self, v: T) -> VertexIndex {
         let old_len = self.vertex_count;
         let new_len = old_len + 1;
         let new_adj_size = new_len * new_len;
@@ -122,12 +112,10 @@ impl Graph {
         self.adjacency_matrix[y * self.vertex_count + x] = 0;
     }
     // Value-Associated Operations
-    //pub fn get_vertex_value(&self, x: VertexIndex) -> Option<&T> {
-    pub fn get_vertex_value(&self, x: VertexIndex) -> Option<&u64> {
+    pub fn get_vertex_value(&self, x: VertexIndex) -> Option<&T> {
         self.vertices.get(x)
     }
-    //pub fn set_vertex_value(&mut self, x: VertexIndex, v: T) {
-    pub fn set_vertex_value(&mut self, x: VertexIndex, v: u64) {
+    pub fn set_vertex_value(&mut self, x: VertexIndex, v: T) {
         self.vertices[x] = v
     }
     pub fn get_edge_value(&self, x: VertexIndex, y: VertexIndex) -> EdgeCost {
